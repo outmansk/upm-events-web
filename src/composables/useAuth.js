@@ -1,11 +1,13 @@
 import { ref, computed, onMounted } from 'vue'
+import { initializeApp, deleteApp } from 'firebase/app'
 import {
+    getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
     onAuthStateChanged
 } from 'firebase/auth'
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, getDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore'
 import { auth, db } from '@/firebase/config'
 import { useAuthStore } from '@/stores/authStore'
 import { useNotifications } from './useNotifications'
@@ -105,13 +107,10 @@ export function useAuth() {
     async function createClubAccount(email, password, clubName) {
         try {
             // Use a secondary app instance to avoid signing out the super admin
-            const { initializeApp, deleteApp } = await import('firebase/app')
-            const { getAuth: getSecondaryAuth, createUserWithEmailAndPassword: createUser } = await import('firebase/auth')
-
             const secondaryApp = initializeApp(auth.app.options, 'secondary-' + Date.now())
-            const secondaryAuth = getSecondaryAuth(secondaryApp)
+            const secondaryAuth = getAuth(secondaryApp)
 
-            const cred = await createUser(secondaryAuth, email, password)
+            const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password)
 
             const userData = {
                 uid: cred.user.uid,
@@ -139,8 +138,7 @@ export function useAuth() {
     // Super Admin: list all club accounts
     async function fetchClubAccounts() {
         try {
-            const { collection: col, query: q, where: w, getDocs: gd } = await import('firebase/firestore')
-            const snap = await gd(q(col(db, 'users'), w('role', '==', 'club')))
+            const snap = await getDocs(query(collection(db, 'users'), where('role', '==', 'club')))
             return snap.docs.map((d) => ({ id: d.id, ...d.data() }))
         } catch (err) {
             console.error('Error fetching club accounts:', err)

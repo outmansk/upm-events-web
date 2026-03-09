@@ -19,7 +19,8 @@
         <div
           v-for="evt in events"
           :key="evt.id"
-          class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+          @click="handleEventClick(evt)"
+          class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
         >
           <!-- Image -->
           <div class="relative h-44">
@@ -59,7 +60,8 @@
             </div>
 
             <!-- Vote -->
-            <div class="pt-3 border-t border-slate-100">
+            <!-- Vote -->
+            <div class="pt-3 border-t border-slate-100" @click.stop>
               <VoteAction
                 :event-id="evt.id"
                 :voter-ids="evt.voterIds || []"
@@ -77,16 +79,36 @@
         <p class="text-slate-400 text-sm mt-1">Revenez plus tard pour de nouveaux sondages</p>
       </div>
     </div>
+    
+    <!-- Event Detail Modal -->
+    <EventModal
+      v-model:show="showModal"
+      :event="selectedEvent"
+      @registered="() => { fetchPollEvents() }"
+    />
   </div>
 </template>
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import VoteAction from '@/components/events/VoteAction.vue'
+import EventModal from '@/components/events/EventModal.vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
 import { useEvents } from '@/composables/useEvents'
+import { useAuthStore } from '@/stores/authStore'
 
 const { events, loading, fetchPollEvents } = useEvents()
+const authStore = useAuthStore()
+
+const showModal = ref(false)
+const selectedEvent = ref(null)
+
+function handleEventClick(evt) {
+  if (authStore.isStudent) {
+    selectedEvent.value = evt
+    showModal.value = true
+  }
+}
 
 let unsubscribe = null
 

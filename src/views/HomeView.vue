@@ -29,6 +29,8 @@
           v-for="evt in filteredEvents"
           :key="evt.id"
           :event="evt"
+          :disable-link="authStore.isStudent"
+          @card-click="handleEventClick"
         />
       </div>
 
@@ -39,6 +41,13 @@
         <p class="text-slate-400 text-sm mt-1">Essayez de modifier vos filtres</p>
       </div>
     </div>
+
+    <!-- Event Detail Modal -->
+    <EventModal
+      v-model:show="showModal"
+      :event="selectedEvent"
+      @registered="() => { fetchConfirmedEvents({ type: activeFilter !== 'all' ? activeFilter : undefined }) }"
+    />
   </div>
 </template>
 
@@ -46,10 +55,23 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import EventCard from '@/components/events/EventCard.vue'
 import EventFilter from '@/components/events/EventFilter.vue'
+import EventModal from '@/components/events/EventModal.vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
 import { useEvents } from '@/composables/useEvents'
+import { useAuthStore } from '@/stores/authStore'
 
 const { events, loading, fetchConfirmedEvents } = useEvents()
+const authStore = useAuthStore()
+
+const showModal = ref(false)
+const selectedEvent = ref(null)
+
+function handleEventClick(evt) {
+  if (authStore.isStudent) {
+    selectedEvent.value = evt
+    showModal.value = true
+  }
+}
 
 const search = ref('')
 const activeFilter = ref('all')

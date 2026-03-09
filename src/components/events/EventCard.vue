@@ -1,7 +1,12 @@
 <template>
-  <router-link
-    :to="`/events/${event.id}`"
-    class="group block bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-100 overflow-hidden transition-all duration-300 hover:-translate-y-1"
+  <component
+    :is="disableLink ? 'div' : 'router-link'"
+    :to="!disableLink ? `/events/${event.id}` : undefined"
+    @click="handleClick"
+    :class="[
+      'group block bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-100 overflow-hidden transition-all duration-300 hover:-translate-y-1',
+      disableLink ? 'cursor-pointer' : ''
+    ]"
   >
     <!-- Image -->
     <div class="relative h-48 overflow-hidden">
@@ -66,16 +71,28 @@
         </div>
       </div>
     </div>
-  </router-link>
+  </component>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   event: {
     type: Object,
     required: true
+  },
+  disableLink: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emit = defineEmits(['card-click'])
+
+function handleClick() {
+  if (props.disableLink) {
+    emit('card-click', props.event)
+  }
+}
 
 function formatDate(date) {
   if (!date) return ''
