@@ -13,7 +13,6 @@ import {
     arrayRemove,
     increment,
     onSnapshot,
-    orderBy,
     serverTimestamp
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
@@ -30,20 +29,27 @@ export function useEvents() {
     async function fetchConfirmedEvents(filters = {}) {
         loading.value = true
         try {
-            const constraints = [where('status', '==', 'confirmed')]
-
-            if (filters.type && filters.type !== 'all') {
-                constraints.push(where('type', '==', filters.type))
-            }
-            if (filters.clubId) {
-                constraints.push(where('clubId', '==', filters.clubId))
-            }
-
-            constraints.push(orderBy('date', 'desc'))
-
-            const q = query(collection(db, 'events'), ...constraints)
+            // Simple single-field query — no composite index needed
+            const q = query(collection(db, 'events'), where('status', '==', 'confirmed'))
             const snap = await getDocs(q)
             let results = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+
+            // Sort by date descending (client-side)
+            results.sort((a, b) => {
+                const dateA = a.date?.seconds || 0
+                const dateB = b.date?.seconds || 0
+                return dateB - dateA
+            })
+
+            // Filter by type (client-side)
+            if (filters.type && filters.type !== 'all') {
+                results = results.filter((e) => e.type === filters.type)
+            }
+
+            // Filter by clubId (client-side)
+            if (filters.clubId) {
+                results = results.filter((e) => e.clubId === filters.clubId)
+            }
 
             // Filter by audience
             const userFiliere = authStore.userFiliere
@@ -78,12 +84,18 @@ export function useEvents() {
         loading.value = true
         const q = query(
             collection(db, 'events'),
-            where('status', '==', 'poll'),
-            orderBy('createdAt', 'desc')
+            where('status', '==', 'poll')
         )
 
         const unsubscribe = onSnapshot(q, (snap) => {
-            events.value = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            let results = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            // Sort by createdAt descending (client-side)
+            results.sort((a, b) => {
+                const dateA = a.createdAt?.seconds || 0
+                const dateB = b.createdAt?.seconds || 0
+                return dateB - dateA
+            })
+            events.value = results
             loading.value = false
         }, (err) => {
             console.error('Error listening to polls:', err)
@@ -230,11 +242,17 @@ export function useEvents() {
         try {
             const q = query(
                 collection(db, 'events'),
-                where('clubId', '==', clubId),
-                orderBy('createdAt', 'desc')
+                where('clubId', '==', clubId)
             )
             const snap = await getDocs(q)
-            events.value = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            let results = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            // Sort by createdAt descending (client-side)
+            results.sort((a, b) => {
+                const dateA = a.createdAt?.seconds || 0
+                const dateB = b.createdAt?.seconds || 0
+                return dateB - dateA
+            })
+            events.value = results
         } catch (err) {
             console.error('Error fetching club events:', err)
             showError('Erreur lors du chargement de vos événements')
@@ -248,11 +266,17 @@ export function useEvents() {
         try {
             const q = query(
                 collection(db, 'events'),
-                where('status', '==', 'pending'),
-                orderBy('createdAt', 'desc')
+                where('status', '==', 'pending')
             )
             const snap = await getDocs(q)
-            events.value = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            let results = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            // Sort by createdAt descending (client-side)
+            results.sort((a, b) => {
+                const dateA = a.createdAt?.seconds || 0
+                const dateB = b.createdAt?.seconds || 0
+                return dateB - dateA
+            })
+            events.value = results
         } catch (err) {
             console.error('Error fetching pending events:', err)
             showError('Erreur lors du chargement des événements en attente')

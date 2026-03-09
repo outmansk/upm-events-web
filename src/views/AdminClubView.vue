@@ -106,8 +106,14 @@
                   </span>
                 </div>
 
-                <!-- Attendance List -->
-                <AttendanceList :attendees="evt.attendees || []" />
+                <!-- View Attendees Button -->
+                <button
+                  @click="openAttendees(evt)"
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-sm font-semibold transition-all"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  Voir les inscrits
+                </button>
               </div>
             </div>
           </div>
@@ -128,18 +134,33 @@
         </router-link>
       </div>
     </div>
+
+    <!-- Attendees Modal -->
+    <AttendeesModal
+      v-model:show="showAttendeesModal"
+      :event-title="selectedEvent?.title || ''"
+      :attendees="selectedEvent?.attendees || []"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
-import AttendanceList from '@/components/events/AttendanceList.vue'
+import AttendeesModal from '@/components/events/AttendeesModal.vue'
 import { useEvents } from '@/composables/useEvents'
 import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
 const { events, loading, fetchClubEvents } = useEvents()
+
+const showAttendeesModal = ref(false)
+const selectedEvent = ref(null)
+
+function openAttendees(evt) {
+  selectedEvent.value = evt
+  showAttendeesModal.value = true
+}
 
 const confirmedCount = computed(() => events.value.filter((e) => e.status === 'confirmed').length)
 const pollCount = computed(() => events.value.filter((e) => e.status === 'poll').length)
