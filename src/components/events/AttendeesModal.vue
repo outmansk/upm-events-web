@@ -2,7 +2,6 @@
   <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" @click.self="close">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
-      <!-- Header -->
       <div class="p-5 sm:p-6 border-b border-slate-100 shrink-0">
         <div class="flex items-center justify-between">
           <div>
@@ -14,7 +13,7 @@
           </button>
         </div>
 
-        <!-- Counter + Search -->
+
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-4">
           <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-lg shrink-0">
             <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
