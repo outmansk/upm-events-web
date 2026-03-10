@@ -315,6 +315,26 @@ export function useEvents() {
         }
     }
 
+    async function fetchAllEvents() {
+        loading.value = true
+        try {
+            const q = query(collection(db, 'events'))
+            const snap = await getDocs(q)
+            let results = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+            results.sort((a, b) => {
+                const dateA = a.createdAt?.seconds || 0
+                const dateB = b.createdAt?.seconds || 0
+                return dateB - dateA
+            })
+            events.value = results
+        } catch (err) {
+            console.error('Error fetching all events:', err)
+            showError('Erreur lors du chargement de tous les événements')
+        } finally {
+            loading.value = false
+        }
+    }
+
     async function approveEvent(eventId, newStatus = 'confirmed') {
         try {
             const eventRef = doc(db, 'events', eventId)
@@ -340,6 +360,20 @@ export function useEvents() {
         }
     }
 
+    async function deleteEvent(eventId) {
+        try {
+            const eventRef = doc(db, 'events', eventId)
+            await deleteDoc(eventRef)
+            showSuccess('Événement supprimé')
+            events.value = events.value.filter((e) => e.id !== eventId)
+            return true
+        } catch (err) {
+            console.error('Error deleting event:', err)
+            showError('Erreur lors de la suppression')
+            return false
+        }
+    }
+
     return {
         events,
         event,
@@ -354,6 +388,8 @@ export function useEvents() {
         fetchClubEvents,
         fetchPendingEvents,
         approveEvent,
-        rejectEvent
+        rejectEvent,
+        fetchAllEvents,
+        deleteEvent
     }
 }

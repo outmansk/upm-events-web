@@ -7,7 +7,7 @@ import {
     signOut,
     onAuthStateChanged
 } from 'firebase/auth'
-import { doc, setDoc, getDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, setDoc, getDoc, serverTimestamp, collection, query, where, getDocs, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebase/config'
 import { useAuthStore } from '@/stores/authStore'
 import { useNotifications } from './useNotifications'
@@ -147,6 +147,19 @@ export function useAuth() {
         }
     }
 
+    // Super Admin: delete a club account from Firestore
+    async function deleteClubAccount(uid) {
+        try {
+            await deleteDoc(doc(db, 'users', uid));
+            showSuccess('Compte club supprimé');
+            return true;
+        } catch (err) {
+            console.error('Error deleting club:', err);
+            showError('Erreur lors de la suppression du compte');
+            return false;
+        }
+    }
+
     function getAuthErrorMessage(code) {
         const messages = {
             'auth/user-not-found': 'Aucun compte trouvé avec cet email',
@@ -171,6 +184,7 @@ export function useAuth() {
         initAuth,
         fetchProfile,
         createClubAccount,
-        fetchClubAccounts
+        fetchClubAccounts,
+        deleteClubAccount
     }
 }

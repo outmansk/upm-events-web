@@ -37,6 +37,9 @@
             <p class="text-sm text-slate-500 truncate mt-0.5">{{ club.email }}</p>
             <p class="text-xs text-slate-400 mt-2">Créé le {{ formatDate(club.createdAt) }}</p>
           </div>
+          <button @click="handleDeleteClub(club.id)" class="text-red-500 hover:text-red-700 p-2 opacity-50 hover:opacity-100 transition-opacity" title="Supprimer le club">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          </button>
         </div>
       </div>
 
@@ -45,6 +48,43 @@
         <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
         <p class="text-slate-500 font-medium">Aucun club créé</p>
         <p class="text-slate-400 text-sm mt-1">Cliquez sur "Nouveau Club" pour commencer</p>
+      </div>
+    </div>
+
+    <!-- Events Management Section -->
+    <div class="max-w-7xl mx-auto px-4 py-8 border-t border-slate-200 mt-4">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-800">Tous les événements</h2>
+      </div>
+
+      <LoadingSpinner v-if="loadingEvents" message="Chargement des événements..." />
+
+      <div v-else-if="events.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="event in events"
+          :key="event.id"
+          class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3"
+        >
+          <div class="flex justify-between items-start">
+            <h3 class="font-bold text-slate-800 line-clamp-1" :title="event.title">{{ event.title }}</h3>
+            <span class="px-2 py-1 rounded text-xs font-semibold shrink-0"
+                  :class="event.status === 'confirmed' ? 'bg-green-100 text-green-700' : event.status === 'poll' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'">
+              {{ event.status === 'confirmed' ? 'Confirmé' : event.status === 'poll' ? 'Sondage' : 'En attente' }}
+            </span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">{{ event.description }}</p>
+          <div class="text-xs text-slate-400 mt-auto pt-3 border-t border-slate-100 flex justify-between items-center">
+            <span class="truncate">Par: {{ event.clubName }}</span>
+            <button @click="handleDeleteEvent(event.id)" class="text-red-500 hover:text-red-700 flex items-center gap-1 shrink-0 font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="text-center py-12">
+        <p class="text-slate-500 font-medium">Aucun événement n'a été créé</p>
       </div>
     </div>
 
@@ -117,10 +157,13 @@
 import { ref, reactive, onMounted } from 'vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
 import { useAuth } from '@/composables/useAuth'
+import { useEvents } from '@/composables/useEvents'
 
-const { fetchClubAccounts, createClubAccount } = useAuth()
+const { fetchClubAccounts, createClubAccount, deleteClubAccount } = useAuth()
+const { events, fetchAllEvents, deleteEvent } = useEvents()
 
 const loading = ref(true)
+const loadingEvents = ref(true)
 const creating = ref(false)
 const clubs = ref([])
 const showCreateModal = ref(false)
@@ -132,13 +175,35 @@ const form = reactive({
 })
 
 onMounted(async () => {
-  await loadClubs()
+  await Promise.all([
+    loadClubs(),
+    loadEvents()
+  ])
 })
 
 async function loadClubs() {
   loading.value = true
   clubs.value = await fetchClubAccounts()
   loading.value = false
+}
+
+async function loadEvents() {
+  loadingEvents.value = true
+  await fetchAllEvents()
+  loadingEvents.value = false
+}
+
+async function handleDeleteClub(id) {
+  if (confirm('Voulez-vous vraiment supprimer ce compte club ?')) {
+    const success = await deleteClubAccount(id)
+    if (success) await loadClubs()
+  }
+}
+
+async function handleDeleteEvent(id) {
+  if (confirm('Voulez-vous vraiment supprimer cet événement ?')) {
+    await deleteEvent(id)
+  }
 }
 
 async function handleCreateClub() {
