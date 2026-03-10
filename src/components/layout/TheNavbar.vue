@@ -22,14 +22,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1" /></svg>
             Accueil
           </router-link>
-          <router-link
-            to="/polls"
-            class="flex items-center gap-1.5 text-white/70 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-white/10"
-            active-class="!text-white !bg-white/15"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-            Sondages
-          </router-link>
+
           <router-link
             v-if="isClub"
             to="/admin"
@@ -90,7 +83,7 @@
       <transition name="slide">
         <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-white/10 pt-3">
           <router-link to="/" class="block text-white/80 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" @click="mobileMenuOpen = false">Accueil</router-link>
-          <router-link to="/polls" class="block text-white/80 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" @click="mobileMenuOpen = false">Sondages</router-link>
+
           <router-link v-if="isClub" to="/admin" class="block text-white/80 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" @click="mobileMenuOpen = false">Mon Club</router-link>
           <router-link v-if="isSuperAdmin" to="/validation" class="block text-white/80 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" @click="mobileMenuOpen = false">Validation</router-link>
           <router-link v-if="isSuperAdmin" to="/superadmin/panel" class="block text-white/80 hover:text-white hover:bg-white/10 px-4 py-2.5 rounded-lg text-sm font-medium transition-all" @click="mobileMenuOpen = false">Panel Admin</router-link>

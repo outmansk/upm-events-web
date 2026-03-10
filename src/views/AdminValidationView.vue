@@ -55,12 +55,6 @@
                     <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
                       ⏳ En attente
                     </span>
-                    <span
-                      class="px-2 py-0.5 rounded-full text-xs font-semibold"
-                      :class="evt.intendedStatus === 'confirmed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'"
-                    >
-                      Souhaité : {{ evt.intendedStatus === 'confirmed' ? 'Confirmé' : 'Sondage' }}
-                    </span>
                   </div>
                 </div>
 
@@ -99,7 +93,7 @@
                 <!-- Action buttons -->
                 <div class="flex gap-3 pt-2 border-t border-slate-100">
                   <button
-                    @click="handleApprove(evt)"
+                    @click="handleApprove(evt.id)"
                     :disabled="processing === evt.id"
                     class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold text-sm
                            shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all
@@ -146,11 +140,9 @@ onMounted(() => {
   fetchPendingEvents()
 })
 
-async function handleApprove(evt) {
-  processing.value = evt.id
-  // Use the intended status the club chose (confirmed or poll)
-  const targetStatus = evt.intendedStatus || 'confirmed'
-  await approveEvent(evt.id, targetStatus)
+async function handleApprove(eventId) {
+  processing.value = eventId
+  await approveEvent(eventId, 'confirmed')
   processing.value = null
 }
 

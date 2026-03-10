@@ -70,11 +70,22 @@
           {{ event.location }}
         </div>
       </div>
+
+      <!-- Vote Action -->
+      <div class="pt-3 border-t border-slate-50" @click.stop>
+        <VoteAction
+          :event-id="event.id"
+          :voter-ids="event.voterIds || []"
+          :votes-count="event.votesCount || 0"
+        />
+      </div>
     </div>
   </component>
 </template>
 
 <script setup>
+import VoteAction from '@/components/events/VoteAction.vue'
+
 const props = defineProps({
   event: {
     type: Object,

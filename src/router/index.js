@@ -19,12 +19,7 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/HomeView.vue'),
         meta: { requiresAuth: true }
-    },
-    {
-        path: '/polls',
-        name: 'Polls',
-        component: () => import('@/views/PollsView.vue'),
-        meta: { requiresAuth: true }
+
     },
     {
         path: '/events/:id',
