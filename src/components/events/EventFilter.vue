@@ -6,9 +6,9 @@
       <input
         :value="search"
         @input="$emit('update:search', $event.target.value)"
-        placeholder="Rechercher un événement..."
-        class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder-slate-400
-               focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-all"
+        placeholder="Rechercher un evenement..."
+        class="w-full pl-10 pr-4 h-11 rounded-lg border border-border bg-white text-sm text-text-dark placeholder-[#9CA3AF]
+               focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all"
       />
     </div>
 
@@ -18,10 +18,10 @@
         v-for="filter in filters"
         :key="filter.value"
         @click="$emit('update:activeFilter', filter.value)"
-        class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+        class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border"
         :class="activeFilter === filter.value
-          ? 'bg-primary text-white shadow-md shadow-primary/25'
-          : 'bg-white text-slate-600 border border-slate-200 hover:border-primary/30 hover:text-primary'
+          ? 'bg-primary text-white border-primary'
+          : 'bg-white text-text-muted border-border hover:border-primary/30 hover:text-primary'
         "
       >
         {{ filter.label }}

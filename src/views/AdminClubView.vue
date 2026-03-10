@@ -1,44 +1,43 @@
 <template>
   <div>
     <!-- Hero -->
-    <div class="bg-gradient-to-r from-primary-dark to-primary text-white py-10 px-4">
-      <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="bg-white border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 class="text-3xl font-bold">
+          <h1 class="text-2xl font-bold text-text-dark">
             Mon <span class="text-accent">Club</span>
           </h1>
-          <p class="text-white/70 mt-1 text-sm">Gérez vos événements et suivez les inscriptions</p>
+          <p class="text-text-muted mt-1 text-sm">Gerez vos evenements et suivez les inscriptions</p>
         </div>
         <router-link
           to="/admin/create"
-          class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-accent-light text-white rounded-xl font-semibold text-sm
-                 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-light text-white rounded-lg font-semibold text-sm transition-all"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-          Nouvel événement
+          Nouvel evenement
         </router-link>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <LoadingSpinner v-if="loading" message="Chargement de vos événements..." />
 
       <!-- Stats -->
       <div v-else-if="events.length > 0" class="space-y-6">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="bg-white rounded-2xl border border-slate-100 p-4 text-center shadow-sm">
+          <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
             <p class="text-2xl font-bold text-primary">{{ events.length }}</p>
             <p class="text-xs text-slate-400 mt-1">Événements</p>
           </div>
-          <div class="bg-white rounded-2xl border border-slate-100 p-4 text-center shadow-sm">
+          <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
             <p class="text-2xl font-bold text-emerald-600">{{ confirmedCount }}</p>
             <p class="text-xs text-slate-400 mt-1">Confirmés</p>
           </div>
-          <div class="bg-white rounded-2xl border border-slate-100 p-4 text-center shadow-sm">
+          <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
             <p class="text-2xl font-bold text-blue-600">{{ pollCount }}</p>
             <p class="text-xs text-slate-400 mt-1">Sondages</p>
           </div>
-          <div class="bg-white rounded-2xl border border-slate-100 p-4 text-center shadow-sm">
+          <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
             <p class="text-2xl font-bold text-accent">{{ totalAttendees }}</p>
             <p class="text-xs text-slate-400 mt-1">Inscrits total</p>
           </div>
@@ -60,7 +59,7 @@
                   :alt="evt.title"
                   class="w-full h-full object-cover"
                 />
-                <div v-else class="w-full h-full bg-gradient-to-br from-primary to-primary-light"></div>
+                <div v-else class="w-full h-full bg-surface"></div>
               </div>
 
               <!-- Content -->
@@ -77,7 +76,7 @@
                           'bg-amber-100 text-amber-700': evt.status === 'pending'
                         }"
                       >
-                        {{ evt.status === 'confirmed' ? 'Confirmé' : evt.status === 'poll' ? 'Sondage' : '⏳ En attente' }}
+                        {{ evt.status === 'confirmed' ? 'Confirme' : evt.status === 'poll' ? 'Sondage' : 'En attente' }}
                       </span>
                       <span
                         class="px-2 py-0.5 rounded-full text-xs font-semibold"

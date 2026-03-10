@@ -21,7 +21,7 @@
               {{ event.type === 'free' ? 'Gratuit' : `${event.price} MAD` }}
             </span>
             <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-sm">
-              {{ event.status === 'poll' ? '📊 Sondage' : '✅ Confirmé' }}
+              {{ event.status === 'poll' ? 'Sondage' : 'Confirme' }}
             </span>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold text-white leading-tight">{{ event.title }}</h2>
@@ -89,7 +89,7 @@
         </button>
 
         <div v-else-if="isRegistered" class="w-full py-2.5 bg-emerald-100 text-emerald-700 rounded-xl font-semibold text-sm text-center border border-emerald-200">
-          ✅ Vous êtes inscrit(e)
+          Vous etes inscrit(e)
         </div>
 
         <div v-else-if="!canRegister" class="w-full py-2.5 bg-slate-200 text-slate-500 rounded-xl text-sm text-center border border-slate-300">

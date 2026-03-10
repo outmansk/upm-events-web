@@ -33,7 +33,7 @@
                 {{ event.type === 'free' ? 'Gratuit' : `${event.price} MAD` }}
               </span>
               <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-sm">
-                {{ event.status === 'poll' ? '📊 Sondage' : '✅ Confirmé' }}
+                {{ event.status === 'poll' ? 'Sondage' : 'Confirme' }}
               </span>
             </div>
             <h1 class="text-2xl sm:text-4xl font-bold text-white leading-tight">{{ event.title }}</h1>
@@ -56,7 +56,7 @@
             <div>
               <h2 class="text-lg font-bold text-slate-800 mb-3">Public cible</h2>
               <div v-if="event.targetAudience === 'all'" class="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium">
-                🌐 Toutes les filières
+                Toutes les filieres
               </div>
               <div v-else class="flex flex-wrap gap-2">
                 <span
@@ -143,7 +143,7 @@
                 v-else-if="isRegistered"
                 class="w-full py-3 bg-emerald-50 text-emerald-700 rounded-xl font-semibold text-sm text-center border border-emerald-200"
               >
-                ✅ Vous êtes inscrit(e)
+                Vous etes inscrit(e)
               </div>
 
               <div

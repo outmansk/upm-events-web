@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- Hero -->
-    <div class="bg-gradient-to-r from-primary-dark to-primary text-white py-10 px-4">
-      <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold">
-          Validation des <span class="text-accent">événements</span>
+    <div class="bg-white border-b border-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-2xl font-bold text-text-dark">
+          Validation des <span class="text-accent">evenements</span>
         </h1>
-        <p class="text-white/70 mt-1 text-sm">Approuvez ou rejetez les événements soumis par les clubs</p>
+        <p class="text-text-muted mt-1 text-sm">Approuvez ou rejetez les evenements soumis par les clubs</p>
       </div>
     </div>
 
@@ -53,7 +53,7 @@
                   </div>
                   <div class="flex flex-wrap gap-2">
                     <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-                      ⏳ En attente
+                      En attente
                     </span>
                   </div>
                 </div>
@@ -74,13 +74,13 @@
                     class="flex items-center gap-1"
                     :class="evt.type === 'free' ? 'text-emerald-500' : 'text-amber-500'"
                   >
-                    {{ evt.type === 'free' ? '🎉 Gratuit' : `💰 ${evt.price} MAD` }}
+                    {{ evt.type === 'free' ? 'Gratuit' : `${evt.price} MAD` }}
                   </span>
                 </div>
 
                 <!-- Target audience -->
                 <div class="flex flex-wrap gap-1">
-                  <span v-if="evt.targetAudience === 'all'" class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">🌐 Toutes filières</span>
+                  <span v-if="evt.targetAudience === 'all'" class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs font-medium">Toutes filieres</span>
                   <template v-else-if="Array.isArray(evt.targetAudience)">
                     <span
                       v-for="f in evt.targetAudience"
@@ -122,7 +122,7 @@
       <div v-else class="text-center py-16">
         <svg class="w-16 h-16 mx-auto text-emerald-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <p class="text-slate-500 font-medium">Aucun événement en attente</p>
-        <p class="text-slate-400 text-sm mt-1">Tous les événements ont été traités 🎉</p>
+        <p class="text-slate-400 text-sm mt-1">Tous les evenements ont ete traites</p>
       </div>
     </div>
   </div>

@@ -1,93 +1,101 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-dark to-slate-900 px-4 py-12">
-    <div class="w-full max-w-md">
-      <!-- Logo -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-2xl shadow-lg shadow-accent/30 mb-4">
-          <span class="text-white font-bold text-2xl">U</span>
-        </div>
-        <h1 class="text-3xl font-bold text-white">Créer un compte</h1>
-        <p class="text-white/60 mt-1 text-sm">Rejoignez la communauté UPM Events</p>
-      </div>
+  <div class="min-h-screen flex">
+    <!-- Left: Brand Panel (desktop only) -->
+    <div class="hidden lg:flex lg:w-1/2 bg-primary flex-col items-center justify-center p-12 relative">
+      <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-16 w-auto brightness-0 invert mb-8" />
+      <h2 class="text-white text-3xl font-bold text-center leading-tight mb-3">Rejoignez-nous</h2>
+      <p class="text-white/60 text-center max-w-sm">
+        Creez votre compte etudiant et restez informe des evenements du campus.
+      </p>
+    </div>
 
-      <!-- Card -->
-      <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+    <!-- Right: Form -->
+    <div class="flex-1 flex items-center justify-center bg-surface px-4 py-12">
+      <div class="w-full max-w-[440px]">
+        <!-- Mobile logo -->
+        <div class="lg:hidden text-center mb-8">
+          <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-12 w-auto mx-auto mb-4" />
+        </div>
+
+        <h1 class="text-2xl font-bold text-text-dark mb-1">Creer un compte</h1>
+        <p class="text-text-muted text-sm mb-8">Inscrivez-vous pour acceder a UPM Events</p>
+
         <form @submit.prevent="handleRegister" class="space-y-4">
-          <div class="space-y-1">
-            <label for="displayName" class="block text-sm font-medium text-white/80">Nom complet</label>
+          <div class="space-y-1.5">
+            <label for="displayName" class="block text-sm font-medium text-[#374151]">Nom complet</label>
             <input
               id="displayName"
               v-model="form.displayName"
               type="text"
               required
               placeholder="Ahmed Benali"
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark placeholder-[#9CA3AF] text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all"
             />
-            <p v-if="errors.displayName" class="text-xs text-red-400">{{ errors.displayName }}</p>
+            <p v-if="errors.displayName" class="text-xs text-red-500">{{ errors.displayName }}</p>
           </div>
 
-          <div class="space-y-1">
-            <label for="reg-email" class="block text-sm font-medium text-white/80">Email</label>
+          <div class="space-y-1.5">
+            <label for="reg-email" class="block text-sm font-medium text-[#374151]">Email</label>
             <input
               id="reg-email"
               v-model="form.email"
               type="email"
               required
               placeholder="votre@email.com"
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark placeholder-[#9CA3AF] text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all"
             />
           </div>
 
-          <div class="space-y-1">
-            <label for="reg-password" class="block text-sm font-medium text-white/80">Mot de passe</label>
+          <div class="space-y-1.5">
+            <label for="reg-password" class="block text-sm font-medium text-[#374151]">Mot de passe</label>
             <input
               id="reg-password"
               v-model="form.password"
               type="password"
               required
-              placeholder="Min. 6 caractères"
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm"
+              placeholder="Min. 6 caracteres"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark placeholder-[#9CA3AF] text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all"
             />
-            <p v-if="errors.password" class="text-xs text-red-400">{{ errors.password }}</p>
+            <p v-if="errors.password" class="text-xs text-red-500">{{ errors.password }}</p>
           </div>
 
-
-
           <!-- Filiere -->
-          <div class="space-y-1">
-            <label for="filiere" class="block text-sm font-medium text-white/80">Filière</label>
+          <div class="space-y-1.5">
+            <label for="filiere" class="block text-sm font-medium text-[#374151]">Filiere</label>
             <select
               id="filiere"
               v-model="form.filiere"
               required
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm appearance-none cursor-pointer"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all appearance-none cursor-pointer"
             >
-              <option value="" disabled class="bg-slate-800 text-white">Choisir une filière</option>
-              <option v-for="f in filieres" :key="f" :value="f" class="bg-slate-800 text-white">{{ f }}</option>
+              <option value="" disabled>Choisir une filiere</option>
+              <option v-for="f in filieres" :key="f" :value="f">{{ f }}</option>
             </select>
           </div>
-
-
 
           <button
             type="submit"
             :disabled="loading"
-            class="w-full py-3 bg-accent hover:bg-accent-light text-white rounded-xl font-semibold text-sm
-                   shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200
+            class="w-full h-11 bg-primary hover:bg-primary-light text-white rounded-lg font-semibold text-sm
+                   transition-all duration-200
                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
           >
             <svg v-if="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"></path>
             </svg>
-            {{ loading ? 'Création...' : 'Créer mon compte' }}
+            {{ loading ? 'Creation...' : 'Creer mon compte' }}
           </button>
         </form>
 
         <div class="mt-6 text-center">
-          <p class="text-white/50 text-sm">
-            Déjà un compte ?
-            <router-link to="/login" class="text-accent hover:text-accent-light font-semibold transition-colors">
+          <p class="text-text-muted text-sm">
+            Deja un compte ?
+            <router-link to="/login" class="text-accent hover:text-accent-dark font-semibold transition-colors">
               Se connecter
             </router-link>
           </p>

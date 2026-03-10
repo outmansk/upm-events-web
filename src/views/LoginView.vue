@@ -1,49 +1,57 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-dark to-slate-900 px-4 py-12">
-    <div class="w-full max-w-md">
-      <!-- Logo -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-accent rounded-2xl shadow-lg shadow-accent/30 mb-4">
-          <span class="text-white font-bold text-2xl">U</span>
-        </div>
-        <h1 class="text-3xl font-bold text-white">Bienvenue</h1>
-        <p class="text-white/60 mt-1 text-sm">Connectez-vous à UPM Events</p>
-      </div>
+  <div class="min-h-screen flex">
+    <!-- Left: Brand Panel (desktop only) -->
+    <div class="hidden lg:flex lg:w-1/2 bg-primary flex-col items-center justify-center p-12 relative">
+      <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-16 w-auto brightness-0 invert mb-8" />
+      <h2 class="text-white text-3xl font-bold text-center leading-tight mb-3">UPM Events</h2>
+      <p class="text-white/60 text-center max-w-sm">
+        Votre portail pour decouvrir et participer aux evenements de l'Universite Privee de Marrakech.
+      </p>
+    </div>
 
-      <!-- Card -->
-      <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+    <!-- Right: Form -->
+    <div class="flex-1 flex items-center justify-center bg-surface px-4 py-12">
+      <div class="w-full max-w-[440px]">
+        <!-- Mobile logo -->
+        <div class="lg:hidden text-center mb-8">
+          <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-12 w-auto mx-auto mb-4" />
+        </div>
+
+        <h1 class="text-2xl font-bold text-text-dark mb-1">Bienvenue</h1>
+        <p class="text-text-muted text-sm mb-8">Connectez-vous a votre compte UPM Events</p>
+
         <form @submit.prevent="handleLogin" class="space-y-5">
-          <div class="space-y-1">
-            <label for="email" class="block text-sm font-medium text-white/80">Email</label>
+          <div class="space-y-1.5">
+            <label for="email" class="block text-sm font-medium text-[#374151]">Email</label>
             <input
               id="email"
               v-model="email"
               type="email"
               required
               placeholder="votre@email.com"
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40
-                     focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark placeholder-[#9CA3AF] text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all"
             />
           </div>
 
-          <div class="space-y-1">
-            <label for="password" class="block text-sm font-medium text-white/80">Mot de passe</label>
+          <div class="space-y-1.5">
+            <label for="password" class="block text-sm font-medium text-[#374151]">Mot de passe</label>
             <input
               id="password"
               v-model="password"
               type="password"
               required
-              placeholder="••••••••"
-              class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40
-                     focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all text-sm"
+              placeholder="Votre mot de passe"
+              class="w-full h-11 px-4 rounded-lg border border-[#D1D5DB] bg-white text-text-dark placeholder-[#9CA3AF] text-sm
+                     focus:outline-none focus:border-primary focus:ring-[3px] focus:ring-primary/10 transition-all"
             />
           </div>
 
           <button
             type="submit"
             :disabled="loading"
-            class="w-full py-3 bg-accent hover:bg-accent-light text-white rounded-xl font-semibold text-sm
-                   shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all duration-200
+            class="w-full h-11 bg-primary hover:bg-primary-light text-white rounded-lg font-semibold text-sm
+                   transition-all duration-200
                    disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <svg v-if="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -55,9 +63,9 @@
         </form>
 
         <div class="mt-6 text-center">
-          <p class="text-white/50 text-sm">
+          <p class="text-text-muted text-sm">
             Pas encore de compte ?
-            <router-link to="/register" class="text-accent hover:text-accent-light font-semibold transition-colors">
+            <router-link to="/register" class="text-accent hover:text-accent-dark font-semibold transition-colors">
               S'inscrire
             </router-link>
           </p>

@@ -69,7 +69,7 @@
                 : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
               "
             >
-              🎉 Gratuit
+              Gratuit
             </button>
             <button
               type="button"
@@ -80,7 +80,7 @@
                 : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
               "
             >
-              💰 Payant
+              Payant
             </button>
           </div>
         </div>
