@@ -3,14 +3,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
-        <router-link to="/" class="flex items-center gap-3 group">
+        <router-link to="/" class="flex items-center gap-2 group">
           <img
-            src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg"
+            src="/upm-icon.svg"
             alt="UPM"
-            class="h-9 w-auto"
+            class="h-8 w-auto"
           />
-          <span class="text-primary font-bold text-lg tracking-tight hidden sm:block">
-            UPM <span class="text-accent font-extrabold">Events</span>
+          <span class="text-accent font-extrabold text-2xl tracking-tight hidden sm:block">
+            Events
           </span>
         </router-link>
 

@@ -5,7 +5,7 @@
         <!-- About -->
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-8 w-auto brightness-0 invert" />
+            <img src="/upm-icon.svg" alt="UPM" class="h-8 w-auto brightness-0 invert" />
             <span class="font-bold text-lg">UPM <span class="text-accent">Events</span></span>
           </div>
           <p class="text-white/60 text-sm leading-relaxed">

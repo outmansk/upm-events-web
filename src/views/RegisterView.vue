@@ -2,7 +2,10 @@
   <div class="min-h-screen flex">
     <!-- Left: Brand Panel (desktop only) -->
     <div class="hidden lg:flex lg:w-1/2 bg-primary flex-col items-center justify-center p-12 relative">
-      <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-16 w-auto brightness-0 invert mb-8" />
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <img src="/upm-icon.svg" alt="UPM" class="h-14 w-auto brightness-0 invert" />
+        <span class="text-accent font-extrabold text-5xl tracking-tight">Events</span>
+      </div>
       <h2 class="text-white text-3xl font-bold text-center leading-tight mb-3">Rejoignez-nous</h2>
       <p class="text-white/60 text-center max-w-sm">
         Creez votre compte etudiant et restez informe des evenements du campus.
@@ -13,8 +16,9 @@
     <div class="flex-1 flex items-center justify-center bg-surface px-4 py-12">
       <div class="w-full max-w-[440px]">
         <!-- Mobile logo -->
-        <div class="lg:hidden text-center mb-8">
-          <img src="https://upm.ac.ma/wp-content/themes/upm2017/img/upm.svg" alt="UPM" class="h-12 w-auto mx-auto mb-4" />
+        <div class="lg:hidden flex items-center justify-center gap-2 mb-8">
+          <img src="/upm-icon.svg" alt="UPM" class="h-10 w-auto" />
+          <span class="text-accent font-extrabold text-3xl tracking-tight">Events</span>
         </div>
 
         <h1 class="text-2xl font-bold text-text-dark mb-1">Creer un compte</h1>
