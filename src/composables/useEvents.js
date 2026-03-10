@@ -19,9 +19,13 @@ import { db } from '@/firebase/config'
 import { useAuthStore } from '@/stores/authStore'
 import { useNotifications } from './useNotifications'
 
+// Global state for events so updates from any instance instantly reflect everywhere
+const globalEvents = ref([])
+const globalEvent = ref(null)
+
 export function useEvents() {
-    const events = ref([])
-    const event = ref(null)
+    const events = globalEvents
+    const event = globalEvent
     const loading = ref(false)
     const authStore = useAuthStore()
     const { showSuccess, showError, showInfo } = useNotifications()
