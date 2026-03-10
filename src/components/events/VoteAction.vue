@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-3">
     <button
-      @click="handleVote"
+      @click.stop.prevent="handleVote"
       :disabled="loading"
       class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border"
       :class="hasVoted

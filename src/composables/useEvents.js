@@ -170,13 +170,39 @@ export function useEvents() {
                     voterIds: arrayRemove(uid),
                     votesCount: increment(-1)
                 })
-                showInfo('Vote retiré')
+
+                // Update local state for reactivity
+                const evt = events.value.find(e => e.id === eventId)
+                if (evt) {
+                    evt.voterIds = evt.voterIds.filter(id => id !== uid)
+                    evt.votesCount = Math.max(0, (evt.votesCount || 0) - 1)
+                }
+                if (event.value?.id === eventId) {
+                    event.value.voterIds = event.value.voterIds.filter(id => id !== uid)
+                    event.value.votesCount = Math.max(0, (event.value.votesCount || 0) - 1)
+                }
+
+                showInfo('Vote retire')
             } else {
                 await updateDoc(eventRef, {
                     voterIds: arrayUnion(uid),
                     votesCount: increment(1)
                 })
-                showSuccess('Vote enregistré !')
+
+                // Update local state for reactivity
+                const evt = events.value.find(e => e.id === eventId)
+                if (evt) {
+                    if (!evt.voterIds) evt.voterIds = []
+                    evt.voterIds.push(uid)
+                    evt.votesCount = (evt.votesCount || 0) + 1
+                }
+                if (event.value?.id === eventId) {
+                    if (!event.value.voterIds) event.value.voterIds = []
+                    event.value.voterIds.push(uid)
+                    event.value.votesCount = (event.value.votesCount || 0) + 1
+                }
+
+                showSuccess('Vote enregistre !')
             }
         } catch (err) {
             console.error('Error toggling vote:', err)
