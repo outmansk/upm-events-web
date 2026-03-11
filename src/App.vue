@@ -41,6 +41,9 @@
 
     <!-- Footer (only when authenticated) -->
     <TheFooter v-if="isAuthenticated && !authLoading" />
+
+    <!-- Chatbot (students only) -->
+    <ChatbotWidget v-if="isAuthenticated && !authLoading && isStudent" />
   </div>
 </template>
 
@@ -49,6 +52,7 @@ import { computed, onMounted } from 'vue'
 import TheNavbar from '@/components/layout/TheNavbar.vue'
 import TheFooter from '@/components/layout/TheFooter.vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
+import ChatbotWidget from '@/components/chat/ChatbotWidget.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useAuth } from '@/composables/useAuth'
 import { useNotifications } from '@/composables/useNotifications'
@@ -59,6 +63,7 @@ const { notifications, removeNotification } = useNotifications()
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const authLoading = computed(() => authStore.loading)
+const isStudent = computed(() => authStore.isStudent)
 
 onMounted(() => {
   initAuth()
