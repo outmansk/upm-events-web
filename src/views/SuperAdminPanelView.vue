@@ -32,8 +32,8 @@
           <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
           </div>
-          <div class="flex-1 min-w-0">
-            <h3 class="font-bold text-slate-800 truncate">{{ club.displayName }}</h3>
+          <div class="flex-1 min-w-0 cursor-pointer group" @click="openProfile({ ...club, role: 'club' })">
+            <h3 class="font-bold text-slate-800 truncate group-hover:text-primary transition-colors">{{ club.displayName }}</h3>
             <p class="text-sm text-slate-500 truncate mt-0.5">{{ club.email }}</p>
             <p class="text-xs text-slate-400 mt-2">Créé le {{ formatDate(club.createdAt) }}</p>
           </div>
@@ -150,6 +150,13 @@
         </form>
       </div>
     </div>
+
+    <!-- User Profile Popup -->
+    <UserProfilePopup 
+      :is-open="showProfilePopup" 
+      :user="selectedProfile" 
+      @close="showProfilePopup = false" 
+    />
   </div>
 </template>
 
@@ -158,6 +165,7 @@ import { ref, reactive, onMounted } from 'vue'
 import LoadingSpinner from '@/components/layout/LoadingSpinner.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useEvents } from '@/composables/useEvents'
+import UserProfilePopup from '@/components/UserProfilePopup.vue'
 
 const { fetchClubAccounts, createClubAccount, deleteClubAccount } = useAuth()
 const { events, fetchAllEvents, deleteEvent } = useEvents()
@@ -167,6 +175,9 @@ const loadingEvents = ref(true)
 const creating = ref(false)
 const clubs = ref([])
 const showCreateModal = ref(false)
+
+const showProfilePopup = ref(false)
+const selectedProfile = ref(null)
 
 const form = reactive({
   clubName: '',
@@ -228,5 +239,10 @@ function formatDate(date) {
     month: 'short',
     year: 'numeric'
   })
+}
+
+function openProfile(profile) {
+  selectedProfile.value = profile
+  showProfilePopup.value = true
 }
 </script>

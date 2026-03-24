@@ -56,7 +56,10 @@
 
         <!-- User Info + Logout -->
         <div class="flex items-center gap-3">
-          <div class="hidden sm:flex items-center gap-2.5 text-sm">
+          <div 
+            @click="openProfile"
+            class="hidden sm:flex items-center gap-2.5 text-sm cursor-pointer hover:bg-surface px-2.5 py-1.5 rounded-xl transition-colors"
+          >
             <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
               <span class="text-primary font-semibold text-xs">{{ userInitials }}</span>
             </div>
@@ -91,6 +94,13 @@
         </div>
       </transition>
     </div>
+
+    <!-- User Profile Popup -->
+    <UserProfilePopup 
+      :is-open="showProfilePopup" 
+      :user="currentUserProfile" 
+      @close="showProfilePopup = false" 
+    />
   </nav>
 </template>
 
@@ -99,11 +109,13 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useAuth } from '@/composables/useAuth'
+import UserProfilePopup from '@/components/UserProfilePopup.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const { logout } = useAuth()
 const mobileMenuOpen = ref(false)
+const showProfilePopup = ref(false)
 
 const isClub = computed(() => authStore.isClub)
 const isSuperAdmin = computed(() => authStore.isSuperAdmin)
@@ -113,6 +125,12 @@ const userInitials = computed(() => {
   if (!name) return '?'
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
 })
+
+const currentUserProfile = computed(() => authStore.profile)
+
+function openProfile() {
+  showProfilePopup.value = true
+}
 
 async function handleLogout() {
   await logout()

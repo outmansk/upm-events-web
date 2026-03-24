@@ -59,7 +59,8 @@
           <div
             v-for="(profile, index) in filteredProfiles"
             :key="profile.uid"
-            class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100"
+            @click="openProfile(profile)"
+            class="flex items-center gap-4 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-100 cursor-pointer"
           >
             <!-- Avatar -->
             <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -106,6 +107,13 @@
       </div>
 
     </div>
+
+    <!-- User Profile Popup -->
+    <UserProfilePopup 
+      :is-open="showProfilePopup" 
+      :user="selectedProfile" 
+      @close="showProfilePopup = false" 
+    />
   </div>
 </template>
 
@@ -113,6 +121,7 @@
 import { ref, computed, watch } from 'vue'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase/config'
+import UserProfilePopup from '@/components/UserProfilePopup.vue'
 
 const props = defineProps({
   show: Boolean,
@@ -125,6 +134,9 @@ const emit = defineEmits(['update:show'])
 const search = ref('')
 const loading = ref(false)
 const attendeeProfiles = ref([])
+
+const showProfilePopup = ref(false)
+const selectedProfile = ref(null)
 
 // Fetch all attendee profiles when modal opens
 watch(() => props.show, async (isOpen) => {
@@ -175,6 +187,11 @@ const filteredProfiles = computed(() => {
 function getInitials(name) {
   if (!name) return '?'
   return name.split(' ').map((w) => w[0]).join('').toUpperCase().slice(0, 2)
+}
+
+function openProfile(profile) {
+  selectedProfile.value = profile
+  showProfilePopup.value = true
 }
 
 function exportCSV() {
