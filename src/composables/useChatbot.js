@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { useAuthStore } from '@/stores/authStore'
@@ -97,34 +96,66 @@ export function useChatbot() {
             // Build the full prompt
             const fullPrompt = `${SYSTEM_PROMPT}${eventsContext}\n\nConversation:\n${conversationHistory}\n\nAssistant:`
 
-            // Use v1 instead of v1beta to avoid 404
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: fullPrompt }]
-                    }],
-                    generationConfig: {
-                        maxOutputTokens: 500,
-                        temperature: 0.7
-                    }
-                })
+            const requestBody = JSON.stringify({
+                contents: [{
+                    parts: [{ text: fullPrompt }]
+                }],
+                generationConfig: {
+                    maxOutputTokens: 500,
+                    temperature: 0.7
+                }
             })
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}))
-                const errMsg = errorData?.error?.message || response.statusText
-                throw new Error(`${response.status} - ${errMsg}`)
+            // Try multiple models as fallback (different API versions)
+            const models = [
+                { name: 'gemini-2.0-flash', version: 'v1beta' },
+                { name: 'gemini-2.0-flash-lite', version: 'v1beta' },
+                { name: 'gemini-1.5-flash', version: 'v1' },
+                { name: 'gemini-pro', version: 'v1' }
+            ]
+
+            let lastError = null
+            let responseText = null
+
+            for (const model of models) {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/${model.version}/models/${model.name}:generateContent?key=${apiKey}`
+                    
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: requestBody
+                    })
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}))
+                        const errMsg = errorData?.error?.message || response.statusText
+                        console.warn(`Model ${model.name} failed: ${response.status} - ${errMsg}`)
+                        lastError = new Error(`${response.status} - ${errMsg}`)
+                        
+                        // If it's a 429 quota error, try next model
+                        if (response.status === 429) continue
+                        // For other errors (like 400, 403), also try next model
+                        if (response.status >= 400) continue
+                        throw lastError
+                    }
+
+                    const data = await response.json()
+                    responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text
+
+                    if (responseText) {
+                        console.log(`✅ Successfully used model: ${model.name}`)
+                        break
+                    }
+                } catch (modelError) {
+                    console.warn(`Model ${model.name} error:`, modelError.message)
+                    lastError = modelError
+                    continue
+                }
             }
 
-            const data = await response.json()
-            const responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text
-
             if (!responseText) {
-                throw new Error('Réponse vide de l\'API')
+                throw lastError || new Error('Aucun modèle disponible n\'a pu répondre')
             }
 
             messages.value.push({

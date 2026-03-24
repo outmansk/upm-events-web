@@ -3,12 +3,12 @@ import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBURwXxyQHwhD2sSKuju88iI74674g1QiM",
-    authDomain: "upm-clubes.firebaseapp.com",
-    projectId: "upm-clubes",
-    storageBucket: "upm-clubes.firebasestorage.app",
-    messagingSenderId: "733070654554",
-    appId: "1:733070654554:web:7050ea09f3baf4e1552c63"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 }
 
 const app = initializeApp(firebaseConfig)
