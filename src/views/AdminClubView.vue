@@ -34,8 +34,8 @@
             <p class="text-xs text-slate-400 mt-1">Confirmés</p>
           </div>
           <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
-            <p class="text-2xl font-bold text-blue-600">{{ pollCount }}</p>
-            <p class="text-xs text-slate-400 mt-1">Sondages</p>
+            <p class="text-2xl font-bold text-blue-600">{{ totalVotes }}</p>
+            <p class="text-xs text-slate-400 mt-1">J'aime</p>
           </div>
           <div class="bg-white rounded-2xl border border-border p-4 text-center shadow-sm">
             <p class="text-2xl font-bold text-accent">{{ totalAttendees }}</p>
@@ -162,7 +162,7 @@ function openAttendees(evt) {
 }
 
 const confirmedCount = computed(() => events.value.filter((e) => e.status === 'confirmed').length)
-const pollCount = computed(() => events.value.filter((e) => e.status === 'poll').length)
+const totalVotes = computed(() => events.value.reduce((sum, e) => sum + (e.votesCount || 0), 0))
 const totalAttendees = computed(() => events.value.reduce((sum, e) => sum + (e.attendees?.length || 0), 0))
 
 onMounted(() => {
