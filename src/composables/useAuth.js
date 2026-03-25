@@ -82,8 +82,10 @@ export function useAuth() {
                 userData.clubName = profileData.clubName
             }
             await setDoc(doc(db, 'users', cred.user.uid), userData)
-            authStore.setProfile(userData)
-            showSuccess('Compte créé avec succès !')
+            // Sign out so the user must log in manually
+            await signOut(auth)
+            authStore.clear()
+            showSuccess('Compte créé avec succès ! Connectez-vous maintenant.')
             return true
         } catch (err) {
             showError(getAuthErrorMessage(err.code))

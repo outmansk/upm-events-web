@@ -158,7 +158,7 @@ async function handleRegister() {
     clubName: ''
   })
   if (success) {
-    router.push('/')
+    router.push('/login')
   }
 }
 </script>
