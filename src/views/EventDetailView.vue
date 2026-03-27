@@ -132,7 +132,14 @@
               </div>
 
               <div
-                v-else-if="!canRegister"
+                v-else-if="isPastEvent"
+                class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl text-sm text-center border border-slate-200"
+              >
+                Cet événement est déjà passé
+              </div>
+
+              <div
+                v-else-if="isWrongFiliere"
                 class="w-full py-3 bg-slate-50 text-slate-400 rounded-xl text-sm text-center border border-slate-200"
               >
                 Cet événement n'est pas ouvert à votre filière
@@ -194,12 +201,22 @@ const isRegistered = computed(() => {
   return event.value?.attendees?.includes(authStore.user?.uid)
 })
 
-const canRegister = computed(() => {
+const isPastEvent = computed(() => {
+  if (!event.value) return false
+  const eventDate = new Date(event.value.date?.toDate ? event.value.date.toDate() : event.value.date)
+  return eventDate < new Date()
+})
+
+const isWrongFiliere = computed(() => {
   if (!event.value) return false
   const audience = event.value.targetAudience
-  if (audience === 'all') return true
-  if (Array.isArray(audience)) return audience.includes(authStore.userFiliere)
-  return true
+  if (audience === 'all') return false
+  if (Array.isArray(audience)) return !audience.includes(authStore.userFiliere)
+  return false
+})
+
+const canRegister = computed(() => {
+  return !isPastEvent.value && !isWrongFiliere.value
 })
 
 async function handleRegister() {

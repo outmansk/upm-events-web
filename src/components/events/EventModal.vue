@@ -92,7 +92,11 @@
           Vous etes inscrit(e)
         </div>
 
-        <div v-else-if="!canRegister" class="w-full py-2.5 bg-slate-200 text-slate-500 rounded-xl text-sm text-center border border-slate-300">
+        <div v-else-if="isPastEvent" class="w-full py-2.5 bg-slate-200 text-slate-500 rounded-xl text-sm text-center border border-slate-300">
+          Cet événement est déjà passé
+        </div>
+
+        <div v-else-if="isWrongFiliere" class="w-full py-2.5 bg-slate-200 text-slate-500 rounded-xl text-sm text-center border border-slate-300">
           Cet événement n'est pas ouvert à votre filière
         </div>
       </div>
@@ -133,14 +137,22 @@ const isRegistered = computed(() => {
   return event.value?.attendees?.includes(authStore.user?.uid)
 })
 
-const canRegister = computed(() => {
+const isPastEvent = computed(() => {
   if (!event.value) return false
-  const prevDate = new Date(event.value.date?.toDate ? event.value.date.toDate() : event.value.date)
-  if (prevDate < new Date()) return false // maybe in past, but not requested so let's just stick to audience
+  const eventDate = new Date(event.value.date?.toDate ? event.value.date.toDate() : event.value.date)
+  return eventDate < new Date()
+})
+
+const isWrongFiliere = computed(() => {
+  if (!event.value) return false
   const audience = event.value.targetAudience
-  if (audience === 'all') return true
-  if (Array.isArray(audience)) return audience.includes(authStore.userFiliere)
-  return true
+  if (audience === 'all') return false
+  if (Array.isArray(audience)) return !audience.includes(authStore.userFiliere)
+  return false
+})
+
+const canRegister = computed(() => {
+  return !isPastEvent.value && !isWrongFiliere.value
 })
 
 function close() {
